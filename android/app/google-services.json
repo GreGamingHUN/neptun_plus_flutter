@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694957301845",
+    "project_id": "neptunplus-szakdoga",
+    "storage_bucket": "neptunplus-szakdoga.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694957301845:android:c4707d91af6b1f847874dc",
+        "android_client_info": {
+          "package_name": "com.example.neptun_plus_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdK5eE1CEA1CAbYypuPSOyFWU1OtjPoGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

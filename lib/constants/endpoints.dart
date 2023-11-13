@@ -1,0 +1,1 @@
+const getMessages = "GetMessages";
