@@ -14,6 +14,7 @@ class AccountDialog extends StatefulWidget {
 class _AccountDialogState extends State<AccountDialog> {
   bool darkMode = false;
   String neptunCode = "";
+  String trainingName = "";
   late final SharedPreferences prefs;
   @override
   void initState() {
@@ -25,7 +26,7 @@ class _AccountDialogState extends State<AccountDialog> {
     prefs = await SharedPreferences.getInstance();
     bool? isDarkMode = prefs.getBool("darkMode");
     if (isDarkMode == null) {
-      prefs.setBool("darkMode", false);
+      prefs.remove("loggedIn");
       setState(() {
         darkMode = false;
       });
@@ -36,6 +37,12 @@ class _AccountDialogState extends State<AccountDialog> {
     }
 
     neptunCode = prefs.getString("neptunCode") ?? "";
+    String? trainingNameTmp = prefs.getString("trainingDescription");
+
+    trainingName = (trainingNameTmp!.length > 35
+            ? "${trainingNameTmp.substring(0, 35)}..."
+            : trainingNameTmp) ??
+        "";
   }
 
   @override
@@ -50,7 +57,7 @@ class _AccountDialogState extends State<AccountDialog> {
             neptunCode,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          const Text('képzés ide'),
+          Text(trainingName),
           SwitchListTile(
               value: darkMode,
               onChanged: (value) {
