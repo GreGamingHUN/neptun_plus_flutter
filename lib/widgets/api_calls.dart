@@ -78,9 +78,9 @@ Future<List<Map>?> getTrainings() async {
     return null;
   }
   Uri url = await createEndpointUrl(endpoints.getTrainings);
-  Map<dynamic, dynamic> body = defaultBody;
-
   Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
   body["UserLogin"] = loginDetails["neptunCode"];
   body["Password"] = loginDetails["password"];
 
@@ -98,6 +98,30 @@ Future<List<Map>?> getTrainings() async {
         });
       }
       return tmp;
+    }
+  } on SocketException {
+    return null;
+  }
+}
+
+Future<List?> getMessages() async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.getMessages);
+
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["MessagesList"];
     }
   } on SocketException {
     return null;
