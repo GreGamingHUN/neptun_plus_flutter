@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/logic.dart';
 import 'api_calls.dart' as api_calls;
 
@@ -15,11 +17,33 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
   Set<DropdownMenuItem<String>> periodTermList = {};
   List addedSubjectsList = [];
 
+  ScrollController scrollViewController = ScrollController();
+  bool floatingActionVisible = true;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getPeriodTermsList();
+    scrollViewController?.addListener(() {
+      if (scrollViewController?.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (floatingActionVisible == true) {
+          setState(() {
+            floatingActionVisible = false;
+          });
+        }
+      } else {
+        if (scrollViewController?.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (floatingActionVisible == false) {
+            setState(() {
+              floatingActionVisible = true;
+            });
+          }
+        }
+      }
+    });
   }
 
   void getPeriodTermsList() async {
@@ -96,6 +120,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
                 : const SizedBox()),
             Expanded(
               child: ListView.builder(
+                controller: scrollViewController,
                 itemCount: addedSubjectsList.length,
                 itemBuilder: (context, index) {
                   return AddedSubjectCard(
@@ -111,6 +136,24 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
               ),
             )
           ],
+        ),
+      ),
+      floatingActionButton: Visibility(
+        visible: true,
+        maintainAnimation: true,
+        maintainState: true,
+        maintainInteractivity: false,
+        child: AnimatedOpacity(
+          opacity: floatingActionVisible ? 1 : 0,
+          duration: const Duration(milliseconds: 100),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton.extended(
+              onPressed: () => Fluttertoast.showToast(msg: "Hamarosan!"),
+              label: const Text('Felvétel'),
+              icon: Icon(Icons.post_add_rounded),
+            ),
+          ),
         ),
       ),
     );
@@ -142,7 +185,10 @@ class AddedSubjectCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(trimString(subjectName ?? '', 25) ?? 'Nincs név'),
+                Text(
+                  trimString(subjectName ?? '', 30) ?? 'Nincs név',
+                  style: TextStyle(fontSize: 16),
+                ),
                 Text(subjectRequirement ?? 'Nincs követelmény'),
               ],
             ),
