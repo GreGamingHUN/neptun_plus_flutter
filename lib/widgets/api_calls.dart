@@ -127,3 +127,53 @@ Future<List?> getMessages() async {
     return null;
   }
 }
+
+Future<List?> getPeriodTerms() async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.getPeriodTerms);
+
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["PeriodTermsList"];
+    }
+  } on SocketException {
+    return null;
+  }
+}
+
+Future<List?> getAddedSubjects(termId) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.getAddedSubjects);
+  print(termId);
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["TermId"] = termId;
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["AddedSubjectsList"];
+    }
+  } on SocketException {
+    return null;
+  }
+}
