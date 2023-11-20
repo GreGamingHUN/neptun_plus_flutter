@@ -27,20 +27,16 @@ class _AccountDialogState extends State<AccountDialog> {
     prefs = await SharedPreferences.getInstance();
     bool? isDarkMode = prefs.getBool("darkMode");
     if (isDarkMode == null) {
-      prefs.remove("loggedIn");
-      setState(() {
-        darkMode = false;
-      });
+      darkMode = false;
     } else if (isDarkMode == true) {
-      setState(() {
-        darkMode = true;
-      });
+      darkMode = true;
     }
+    setState(() {
+      neptunCode = prefs.getString("neptunCode") ?? "";
+      String? trainingNameTmp = prefs.getString("trainingDescription");
 
-    neptunCode = prefs.getString("neptunCode") ?? "";
-    String? trainingNameTmp = prefs.getString("trainingDescription");
-
-    trainingName = logic.trimString(trainingNameTmp ?? "", 35);
+      trainingName = logic.trimString(trainingNameTmp ?? "", 35);
+    });
   }
 
   @override
