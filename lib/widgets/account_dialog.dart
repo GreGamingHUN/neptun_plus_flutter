@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:neptun_plus_flutter/logic.dart' as logic;
 
 class AccountDialog extends StatefulWidget {
   const AccountDialog({super.key});
@@ -39,10 +40,7 @@ class _AccountDialogState extends State<AccountDialog> {
     neptunCode = prefs.getString("neptunCode") ?? "";
     String? trainingNameTmp = prefs.getString("trainingDescription");
 
-    trainingName = (trainingNameTmp!.length > 35
-            ? "${trainingNameTmp.substring(0, 35)}..."
-            : trainingNameTmp) ??
-        "";
+    trainingName = logic.trimString(trainingNameTmp ?? "", 35);
   }
 
   @override
