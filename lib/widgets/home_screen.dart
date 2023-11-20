@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/widgets/account_dialog.dart';
+import 'package:neptun_plus_flutter/widgets/added_subjects_screen.dart';
 import 'package:neptun_plus_flutter/widgets/messages_screen.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api_calls.dart' as api_calls;
 
@@ -41,8 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snapshot.hasError) {
               Fluttertoast.showToast(msg: snapshot.error.toString());
             }
-            return SafeArea(
-              child: Scaffold(
+            return Scaffold(
                 appBar: AppBar(
                   title: const Text('Neptun Plus!'),
                   centerTitle: true,
@@ -65,40 +66,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 body: const [
                   MessagesScreen(),
                   MessagesScreen(),
-                  MessagesScreen(),
+                  AddedSubjectsScreen(),
                   MessagesScreen()
                 ][_currentPageIndex],
-                bottomNavigationBar: NavigationBar(
-                    selectedIndex: _currentPageIndex,
-                    onDestinationSelected: (value) {
-                      setState(() {
-                        _currentPageIndex = value;
-                      });
-                    },
-                    destinations: [
-                      NavigationDestination(
+                bottomNavigationBar: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SalomonBottomBar(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    selectedItemColor: Theme.of(context).colorScheme.primary,
+                    items: [
+                      SalomonBottomBarItem(
                           icon: Icon((_currentPageIndex == 0
                               ? Icons.mail
                               : Icons.mail_outlined)),
-                          label: "Üzenetek"),
-                      NavigationDestination(
+                          title: const Text("Üzenetek")),
+                      SalomonBottomBarItem(
                           icon: Icon((_currentPageIndex == 1
                               ? Icons.calendar_month
                               : Icons.calendar_month_outlined)),
-                          label: "Órarend"),
-                      NavigationDestination(
+                          title: const Text("Órarend")),
+                      SalomonBottomBarItem(
                           icon: Icon((_currentPageIndex == 2
                               ? Icons.book
                               : Icons.book_outlined)),
-                          label: "Tárgyak"),
-                      NavigationDestination(
+                          title: const Text("Tárgyak")),
+                      SalomonBottomBarItem(
                           icon: Icon((_currentPageIndex == 3
                               ? Icons.bookmark
                               : Icons.bookmark_outline)),
-                          label: "Vizsgák"),
-                    ]),
-              ),
-            );
+                          title: const Text("Vizsgák")),
+                    ],
+                    currentIndex: _currentPageIndex,
+                    onTap: (p0) {
+                      setState(() {
+                        _currentPageIndex = p0;
+                      });
+                    },
+                  ),
+                ));
           }
           return const Scaffold(
             body: Center(
