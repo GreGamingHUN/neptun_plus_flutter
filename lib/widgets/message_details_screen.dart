@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'api_calls.dart' as api_calls;
 
 class MessageDetailsScreen extends StatefulWidget {
   MessageDetailsScreen(
       {super.key,
+      required this.id,
       required this.subject,
       required this.details,
       required this.isNew,
       required this.author,
       required this.sendDate});
+  int id;
   String subject;
   String details;
   bool isNew;
@@ -21,6 +25,22 @@ class MessageDetailsScreen extends StatefulWidget {
 }
 
 class _MessageDetailsScreenState extends State<MessageDetailsScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setMessagetoRead();
+  }
+
+  setMessagetoRead() async {
+    bool? success = await api_calls.setReadedMessages(widget.id);
+    if (success == null || success == false) {
+      Fluttertoast.showToast(msg: 'Üzenet olvasottnak jelölése sikertelen!');
+    } else {
+      Fluttertoast.showToast(msg: 'nyomod fasz');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

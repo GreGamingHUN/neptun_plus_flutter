@@ -22,6 +22,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               return MessageCard(
+                id: snapshot.data![index]["Id"],
                 author: snapshot.data![index]["Name"],
                 details: snapshot.data![index]["Detail"],
                 isNew: snapshot.data![index]["IsNew"],
@@ -44,6 +45,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 class MessageCard extends StatefulWidget {
   MessageCard(
       {super.key,
+      required this.id,
       required this.subject,
       required this.details,
       required this.isNew,
@@ -51,7 +53,7 @@ class MessageCard extends StatefulWidget {
       required this.sendDate}) {
     details = logic.trimCSSfromMessage(details);
   }
-
+  int id;
   String subject;
   String details;
   bool isNew;
@@ -69,6 +71,7 @@ class _MessageCardState extends State<MessageCard> {
           context,
           MaterialPageRoute(
             builder: (context) => MessageDetailsScreen(
+                id: widget.id,
                 subject: widget.subject,
                 details: widget.details,
                 isNew: widget.isNew,
