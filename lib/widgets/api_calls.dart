@@ -46,7 +46,8 @@ Future<Map> getLoginDetails() async {
 
 Future<int> neptunLogin(neptunCode, password, instituteUrl) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  Uri url = await createEndpointUrl(endpoints.getMessages);
+  Uri url = await createEndpointUrl(endpoints.getMessages,
+      instituteUrl: instituteUrl);
   Map<dynamic, dynamic> body = defaultBody;
   body["UserLogin"] = neptunCode;
   body["Password"] = password;
@@ -67,8 +68,11 @@ Future<int> neptunLogin(neptunCode, password, instituteUrl) async {
   }
 }
 
-Future<Uri> createEndpointUrl(endpoint) async {
+Future<Uri> createEndpointUrl(endpoint, {instituteUrl}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (instituteUrl != null) {
+    return Uri.parse('$instituteUrl/$endpoint');
+  }
   return Uri.parse('${prefs.getString("instituteUrl")}/$endpoint');
 }
 
