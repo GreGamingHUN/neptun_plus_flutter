@@ -21,13 +21,20 @@ class _MessagesScreenState extends State<MessagesScreen> {
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return MessageCard(
-                id: snapshot.data![index]["Id"],
-                author: snapshot.data![index]["Name"],
-                details: snapshot.data![index]["Detail"],
-                isNew: snapshot.data![index]["IsNew"],
-                sendDate: snapshot.data![index]["SendDate"],
-                subject: snapshot.data![index]["Subject"],
+              return Column(
+                children: [
+                  MessageCard(
+                    id: snapshot.data![index]["Id"],
+                    author: snapshot.data![index]["Name"],
+                    details: snapshot.data![index]["Detail"],
+                    isNew: snapshot.data![index]["IsNew"],
+                    sendDate: snapshot.data![index]["SendDate"],
+                    subject: snapshot.data![index]["Subject"],
+                  ),
+                  const Divider(
+                    height: 1,
+                  )
+                ],
               );
             },
           );
@@ -66,40 +73,49 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MessageDetailsScreen(
-                id: widget.id,
-                subject: widget.subject,
-                details: widget.details,
-                isNew: widget.isNew,
-                author: widget.author,
-                sendDate: widget.sendDate),
-          )),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                logic.trimString(widget.subject, 40),
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight:
-                        widget.isNew ? FontWeight.bold : FontWeight.normal),
-              ),
-              Text(
-                logic.trimString(logic.trimCSSfromMessage(widget.details), 40),
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight:
-                        widget.isNew ? FontWeight.bold : FontWeight.normal),
-              )
-            ],
-          ),
+    return Hero(
+      tag: widget.id.toString(),
+      child: ListTile(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MessageDetailsScreen(
+                    id: widget.id,
+                    subject: widget.subject,
+                    details: widget.details,
+                    isNew: widget.isNew,
+                    author: widget.author,
+                    sendDate: widget.sendDate))),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  logic.trimString(widget.author, 40),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight:
+                          widget.isNew ? FontWeight.bold : FontWeight.normal),
+                ),
+                Text(logic.formatDate(widget.sendDate))
+              ],
+            ),
+            Text(
+              logic.trimString(widget.subject, 40),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight:
+                      widget.isNew ? FontWeight.bold : FontWeight.normal),
+            )
+          ],
+        ),
+        subtitle: Text(
+          logic.trimString(logic.trimCSSfromMessage(widget.details), 40),
+          style: TextStyle(
+              fontSize: 14,
+              fontWeight: widget.isNew ? FontWeight.bold : FontWeight.normal),
         ),
       ),
     );
