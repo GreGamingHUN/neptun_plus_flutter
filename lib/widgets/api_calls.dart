@@ -161,7 +161,6 @@ Future<List?> getAddedSubjects(termId) async {
     return null;
   }
   Uri url = await createEndpointUrl(endpoints.getAddedSubjects);
-  print(termId);
   Map loginDetails = await getLoginDetails();
 
   Map<dynamic, dynamic> body = defaultBody;
@@ -202,6 +201,32 @@ Future<bool?> setReadedMessages(messageId) async {
     Map responseBody = jsonDecode(response.body);
     if (responseBody["ErrorMessage"] == null) {
       return true;
+    }
+  } on SocketException {
+    return null;
+  }
+}
+
+Future<List?> getExams(termId) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+
+  Uri url = await createEndpointUrl(endpoints.getExams);
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["filter"] = {"ExamType": 0, "Term": termId};
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["ExamList"];
     }
   } on SocketException {
     return null;

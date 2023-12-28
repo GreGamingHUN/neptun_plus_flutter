@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/widgets/account_dialog.dart';
 import 'package:neptun_plus_flutter/widgets/added_subjects_screen.dart';
+import 'package:neptun_plus_flutter/widgets/exams_screen.dart';
 import 'package:neptun_plus_flutter/widgets/messages_screen.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   MessagesScreen(),
                   MessagesScreen(),
                   AddedSubjectsScreen(),
-                  MessagesScreen()
+                  ExamsScreen()
                 ][_currentPageIndex],
                 bottomNavigationBar: Padding(
                   padding: const EdgeInsets.all(8.0),
