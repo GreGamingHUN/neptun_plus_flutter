@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/widgets/account_dialog.dart';
 import 'package:neptun_plus_flutter/widgets/added_subjects_screen.dart';
+import 'package:neptun_plus_flutter/widgets/exams_screen.dart';
 import 'package:neptun_plus_flutter/widgets/messages_screen.dart';
+import 'package:neptun_plus_flutter/widgets/timetable_screen.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api_calls.dart' as api_calls;
@@ -33,7 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool switchState = false;
-
+  List<String> pageNames = [
+    'Üzenetek',
+    'Órarend',
+    'Felvett Tárgyak',
+    'Felvett Vizsgák'
+  ];
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -45,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Neptun Plus!'),
+                  title: Text(pageNames[_currentPageIndex]),
                   centerTitle: true,
                   actions: [
                     Padding(
@@ -65,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 body: const [
                   MessagesScreen(),
-                  MessagesScreen(),
+                  TimeTableScreen(),
                   AddedSubjectsScreen(),
-                  MessagesScreen()
+                  ExamsScreen()
                 ][_currentPageIndex],
                 bottomNavigationBar: Padding(
                   padding: const EdgeInsets.all(8.0),

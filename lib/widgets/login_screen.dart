@@ -18,6 +18,9 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController neptunCodeController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  FocusNode neptunCodeField = FocusNode();
+  FocusNode passwordField = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
                   child: TextFormField(
+                    onFieldSubmitted: (value) =>
+                        FocusScope.of(context).requestFocus(passwordField),
+                    focusNode: neptunCodeField,
                     controller: neptunCodeController,
                     decoration: InputDecoration(
                         labelText: 'Neptunkód',
@@ -84,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextFormField(
+                    focusNode: passwordField,
                     obscureText: true,
                     controller: passwordController,
                     decoration: InputDecoration(

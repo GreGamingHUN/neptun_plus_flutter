@@ -46,7 +46,8 @@ Future<Map> getLoginDetails() async {
 
 Future<int> neptunLogin(neptunCode, password, instituteUrl) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  Uri url = await createEndpointUrl(endpoints.getMessages);
+  Uri url = await createEndpointUrl(endpoints.getMessages,
+      instituteUrl: instituteUrl);
   Map<dynamic, dynamic> body = defaultBody;
   body["UserLogin"] = neptunCode;
   body["Password"] = password;
@@ -67,8 +68,11 @@ Future<int> neptunLogin(neptunCode, password, instituteUrl) async {
   }
 }
 
-Future<Uri> createEndpointUrl(endpoint) async {
+Future<Uri> createEndpointUrl(endpoint, {instituteUrl}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (instituteUrl != null) {
+    return Uri.parse('$instituteUrl/$endpoint');
+  }
   return Uri.parse('${prefs.getString("instituteUrl")}/$endpoint');
 }
 
@@ -157,7 +161,6 @@ Future<List?> getAddedSubjects(termId) async {
     return null;
   }
   Uri url = await createEndpointUrl(endpoints.getAddedSubjects);
-  print(termId);
   Map loginDetails = await getLoginDetails();
 
   Map<dynamic, dynamic> body = defaultBody;
@@ -198,6 +201,67 @@ Future<bool?> setReadedMessages(messageId) async {
     Map responseBody = jsonDecode(response.body);
     if (responseBody["ErrorMessage"] == null) {
       return true;
+    }
+  } on SocketException {
+    return null;
+  }
+}
+
+Future<List?> getExams(termId) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+
+  Uri url = await createEndpointUrl(endpoints.getExams);
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["filter"] = {"ExamType": 1, "Term": termId};
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["ExamList"];
+    }
+  } on SocketException {
+    return null;
+  }
+}
+
+Future<List?> getCalendarData(day) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+
+  Uri url = await createEndpointUrl(endpoints.getExams);
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  const calendarData = {
+    "needAllDaylong": true,
+    "Time": true,
+    "Task": true,
+    "Apointment": true,
+    "RegisterList": true,
+    "Consultation": true,
+    "startDate": "/Date(1701993600000)/",
+    "endDate": "/Date(1702079999000)/",
+  };
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return responseBody["calendarData"];
     }
   } on SocketException {
     return null;
