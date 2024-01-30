@@ -4,3 +4,7 @@ const getPeriodTerms = "GetPeriodTerms";
 const getAddedSubjects = "GetAddedSubjects";
 const setReadedMessage = "SetReadedMessage";
 const getExams = "GetExams";
+const getCalendarData = "GetCalendarData";
+const getSubjects = 'GetSubjects';
+const getCurriculums = 'GetCurriculums';
+const getCourses = 'GetCourses';

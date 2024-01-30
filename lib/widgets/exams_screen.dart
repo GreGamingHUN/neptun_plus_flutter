@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/logic.dart';
+import 'package:neptun_plus_flutter/widgets/add_exam_screen.dart';
 import 'package:neptun_plus_flutter/widgets/exam_details_screen.dart';
 import 'api_calls.dart' as api_calls;
 
@@ -17,6 +18,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
   bool isLoadingExams = false;
   Set<DropdownMenuItem<String>> periodTermList = {};
   List ExamsList = [];
+  String? selectedTermId;
 
   ScrollController scrollViewController = ScrollController();
   bool floatingActionVisible = true;
@@ -26,8 +28,8 @@ class _ExamsScreenState extends State<ExamsScreen> {
     // TODO: implement initState
     super.initState();
     getPeriodTermsList();
-    scrollViewController?.addListener(() {
-      if (scrollViewController?.position.userScrollDirection ==
+    scrollViewController.addListener(() {
+      if (scrollViewController.position.userScrollDirection ==
           ScrollDirection.reverse) {
         if (floatingActionVisible == true) {
           setState(() {
@@ -35,7 +37,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
           });
         }
       } else {
-        if (scrollViewController?.position.userScrollDirection ==
+        if (scrollViewController.position.userScrollDirection ==
             ScrollDirection.forward) {
           if (floatingActionVisible == false) {
             setState(() {
@@ -92,10 +94,11 @@ class _ExamsScreenState extends State<ExamsScreen> {
                           hint: const Text('Válassz félévet'),
                           items: periodTermList.toList(),
                           onChanged: (value) async {
+                            selectedTermId = value;
                             setState(() {
                               isLoadingExams = true;
                             });
-                            List? exams = await api_calls.getExams(value);
+                            List? exams = await api_calls.getExams(value, true);
 
                             setState(() {
                               ExamsList = exams ?? [];
@@ -139,7 +142,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
         ),
       ),
       floatingActionButton: Visibility(
-        visible: true,
+        visible: selectedTermId != null,
         maintainAnimation: true,
         maintainState: true,
         maintainInteractivity: false,
@@ -149,7 +152,9 @@ class _ExamsScreenState extends State<ExamsScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton.extended(
-              onPressed: () => Fluttertoast.showToast(msg: "Hamarosan!"),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AddExamScreen(termId: selectedTermId),
+              )),
               label: const Text('Felvétel'),
               icon: Icon(Icons.post_add_rounded),
             ),
@@ -199,12 +204,14 @@ class ExamCard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ExamDetailsScreen(
-                          subjectName: subjectName,
-                          examType: examType,
-                          subjectComplianceResult: subjectComplianceResult,
-                          subjectCode: subjectCode,
-                          startDate: startDate,
-                          endDate: endDate),
+                        subjectName: subjectName,
+                        examType: examType,
+                        subjectComplianceResult: subjectComplianceResult,
+                        subjectCode: subjectCode,
+                        startDate: startDate,
+                        endDate: endDate,
+                        applyToExam: false,
+                      ),
                     )),
                 icon: Icon(Icons.info_outline))
           ],

@@ -36,8 +36,6 @@ class _MessageDetailsScreenState extends State<MessageDetailsScreen> {
     bool? success = await api_calls.setReadedMessages(widget.id);
     if (success == null || success == false) {
       Fluttertoast.showToast(msg: 'Üzenet olvasottnak jelölése sikertelen!');
-    } else {
-      Fluttertoast.showToast(msg: 'nyomod fasz');
     }
   }
 

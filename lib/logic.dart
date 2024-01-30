@@ -12,7 +12,10 @@ String trimCSSfromMessage(String message) {
   return message;
 }
 
-String formatDate(String date) {
+String formatDate(String date,
+    {bool forceDate = false,
+    bool forceTime = false,
+    bool forceFullDate = false}) {
   RegExp regExp = RegExp(r'/Date\((\d+)\)/');
   Match? match = regExp.firstMatch(date);
 
@@ -20,7 +23,15 @@ String formatDate(String date) {
     int dateNumber = int.parse(match.group(1)!);
     DateTime sendTime = DateTime.fromMillisecondsSinceEpoch(dateNumber);
     DateTime currentTime = DateTime.now();
-    if (sendTime.compareTo(currentTime.subtract(const Duration(days: 1))) < 0) {
+
+    if (forceDate) return DateFormat('MM. dd.').format(sendTime);
+    if (forceTime) return DateFormat('HH:mm').format(sendTime);
+    if (forceFullDate) return DateFormat('MM. dd. HH:mm').format(sendTime);
+
+    if (sendTime
+            .compareTo(currentTime.subtract(const Duration(days: 1)))
+            .abs() >
+        0) {
       return DateFormat('MM. dd.').format(sendTime);
     }
     return DateFormat('HH:mm').format(sendTime);

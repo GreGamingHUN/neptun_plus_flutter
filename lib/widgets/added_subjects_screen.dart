@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/logic.dart';
+import 'package:neptun_plus_flutter/widgets/add_subject_screen.dart';
 import 'api_calls.dart' as api_calls;
 
 class AddedSubjectsScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
 
   ScrollController scrollViewController = ScrollController();
   bool floatingActionVisible = true;
+  String selectedTermId = '';
 
   @override
   void initState() {
@@ -91,6 +93,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
                           hint: const Text('Válassz félévet'),
                           items: periodTermList.toList(),
                           onChanged: (value) async {
+                            selectedTermId = value ?? '';
                             setState(() {
                               isLoadingSubjects = true;
                             });
@@ -148,11 +151,18 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
           duration: const Duration(milliseconds: 100),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FloatingActionButton.extended(
-              onPressed: () => Fluttertoast.showToast(msg: "Hamarosan!"),
-              label: const Text('Felvétel'),
-              icon: Icon(Icons.post_add_rounded),
-            ),
+            child: (selectedTermId != ''
+                ? FloatingActionButton.extended(
+                    onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddSubjectScreen(termId: selectedTermId),
+                        )),
+                    label: const Text('Felvétel'),
+                    icon: Icon(Icons.post_add_rounded),
+                  )
+                : null),
           ),
         ),
       ),

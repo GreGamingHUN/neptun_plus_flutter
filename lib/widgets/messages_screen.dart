@@ -12,24 +12,44 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
+  int pageCount = 1;
   @override
   Widget build(BuildContext context) {
+    List? messages = [];
     return FutureBuilder(
-      future: api_calls.getMessages(),
+      future: api_calls.getMessages(pageCount),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (messages == []) {
+            messages = snapshot.data;
+          } else {
+            messages!.addAll(snapshot.data!.toList());
+          }
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: messages!.length + 1,
             itemBuilder: (context, index) {
+              if (index >= messages!.length) {
+                return Center(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton(
+                      onPressed: () async {
+                        setState(() {
+                          pageCount += 1;
+                        });
+                      },
+                      child: const Text('További üzenetek betöltése')),
+                ));
+              }
               return Column(
                 children: [
                   MessageCard(
-                    id: snapshot.data![index]["Id"],
-                    author: snapshot.data![index]["Name"],
-                    details: snapshot.data![index]["Detail"],
-                    isNew: snapshot.data![index]["IsNew"],
-                    sendDate: snapshot.data![index]["SendDate"],
-                    subject: snapshot.data![index]["Subject"],
+                    id: messages![index]["Id"],
+                    author: messages![index]["Name"],
+                    details: messages![index]["Detail"],
+                    isNew: messages![index]["IsNew"],
+                    sendDate: messages![index]["SendDate"],
+                    subject: messages![index]["Subject"],
                   ),
                   const Divider(
                     height: 1,
@@ -76,16 +96,18 @@ class _MessageCardState extends State<MessageCard> {
     return Hero(
       tag: widget.id.toString(),
       child: ListTile(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MessageDetailsScreen(
-                    id: widget.id,
-                    subject: widget.subject,
-                    details: widget.details,
-                    isNew: widget.isNew,
-                    author: widget.author,
-                    sendDate: widget.sendDate))),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MessageDetailsScreen(
+                      id: widget.id,
+                      subject: widget.subject,
+                      details: widget.details,
+                      isNew: widget.isNew,
+                      author: widget.author,
+                      sendDate: widget.sendDate)));
+        },
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
