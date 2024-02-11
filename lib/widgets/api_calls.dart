@@ -98,6 +98,7 @@ Future<List?> getCurriculums() async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List<Map>?> getTrainings() async {
@@ -130,6 +131,7 @@ Future<List<Map>?> getTrainings() async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getMessages(int currentPage) async {
@@ -154,6 +156,7 @@ Future<List?> getMessages(int currentPage) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getPeriodTerms() async {
@@ -178,6 +181,7 @@ Future<List?> getPeriodTerms() async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getAddedSubjects(termId) async {
@@ -203,6 +207,7 @@ Future<List?> getAddedSubjects(termId) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<bool?> setReadedMessages(messageId) async {
@@ -229,6 +234,7 @@ Future<bool?> setReadedMessages(messageId) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getExams(termId, bool added) async {
@@ -255,6 +261,7 @@ Future<List?> getExams(termId, bool added) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getSubjects(termId, String? subjectName, int currentPage) async {
@@ -285,6 +292,7 @@ Future<List?> getSubjects(termId, String? subjectName, int currentPage) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getCourses(subjectId, termId) async {
@@ -314,6 +322,7 @@ Future<List?> getCourses(subjectId, termId) async {
   } on SocketException {
     return null;
   }
+  return null;
 }
 
 Future<List?> getCalendarData(DateTime day) async {
@@ -343,7 +352,6 @@ Future<List?> getCalendarData(DateTime day) async {
   };
 
   body.addAll(calendarData);
-  print(body);
   try {
     Response response =
         await http.post(url, body: jsonEncode(body), headers: defaultHeader);
@@ -354,4 +362,5 @@ Future<List?> getCalendarData(DateTime day) async {
   } on SocketException {
     return null;
   }
+  return null;
 }

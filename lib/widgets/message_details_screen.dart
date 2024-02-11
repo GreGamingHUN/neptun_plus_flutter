@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,7 +29,6 @@ class MessageDetailsScreen extends StatefulWidget {
 class _MessageDetailsScreenState extends State<MessageDetailsScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setMessagetoRead();
   }

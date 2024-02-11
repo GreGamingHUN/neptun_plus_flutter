@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:neptun_plus_flutter/widgets/exam_details_screen.dart';
 import 'api_calls.dart' as api_calls;
 import 'package:neptun_plus_flutter/logic.dart' as logic;
 
@@ -61,7 +62,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                           setState(() {});
                         }
                       },
-                      icon: Icon(Icons.search)),
+                      icon: const Icon(Icons.search)),
                 )
               ],
             ),
@@ -71,8 +72,8 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
             ),
           );
         }
-        return Scaffold(
-          body: const Center(
+        return const Scaffold(
+          body: Center(
             child: CircularProgressIndicator(),
           ),
         );
@@ -127,7 +128,7 @@ class _AddSubjectBodyState extends State<AddSubjectBody> {
                   ],
                 ),
                 subtitle: Text(
-                    '${'${widget.subjectsList?[index]['SubjectSignupType']} · ' + widget.subjectsList?[index]['Credit']} kredit')),
+                    '${'${widget.subjectsList?[index]['SubjectSignupType']} · ${widget.subjectsList?[index]['Credit']}'} kredit')),
             const Divider(
               height: 1,
             )

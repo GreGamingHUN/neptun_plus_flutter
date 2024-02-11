@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +94,6 @@ class _CheckLoginState extends State<CheckLogin> {
     if (loggedIn != null && loggedIn == true) {
       GoRouter.of(context).pushReplacement('/home');
     } else {
-      // ignore: use_build_context_synchronously
       GoRouter.of(context).pushReplacement('/login');
     }
   }

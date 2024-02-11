@@ -49,7 +49,7 @@ class _AccountDialogState extends State<AccountDialog> {
         children: [
           Text(
             neptunCode,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(trainingName),
           SwitchListTile(

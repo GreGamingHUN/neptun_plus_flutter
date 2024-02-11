@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/logic.dart';
 import 'package:neptun_plus_flutter/widgets/add_subject_screen.dart';
 import 'api_calls.dart' as api_calls;
@@ -24,11 +25,10 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPeriodTermsList();
-    scrollViewController?.addListener(() {
-      if (scrollViewController?.position.userScrollDirection ==
+    scrollViewController.addListener(() {
+      if (scrollViewController.position.userScrollDirection ==
           ScrollDirection.reverse) {
         if (floatingActionVisible == true) {
           setState(() {
@@ -36,7 +36,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
           });
         }
       } else {
-        if (scrollViewController?.position.userScrollDirection ==
+        if (scrollViewController.position.userScrollDirection ==
             ScrollDirection.forward) {
           if (floatingActionVisible == false) {
             setState(() {
@@ -114,9 +114,9 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
               ),
             ),
             (isLoadingSubjects
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Center(
+                ? const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(
                       child: CircularProgressIndicator(),
                     ),
                   )
@@ -160,7 +160,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
                               AddSubjectScreen(termId: selectedTermId),
                         )),
                     label: const Text('Felvétel'),
-                    icon: Icon(Icons.post_add_rounded),
+                    icon: const Icon(Icons.post_add_rounded),
                   )
                 : null),
           ),
@@ -196,8 +196,8 @@ class AddedSubjectCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  trimString(subjectName ?? '', 30) ?? 'Nincs név',
-                  style: TextStyle(fontSize: 16),
+                  trimString(subjectName ?? '', 30),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 Text(subjectRequirement ?? 'Nincs követelmény'),
               ],

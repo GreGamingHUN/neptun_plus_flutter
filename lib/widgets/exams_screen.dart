@@ -1,6 +1,7 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/logic.dart';
 import 'package:neptun_plus_flutter/widgets/add_exam_screen.dart';
 import 'package:neptun_plus_flutter/widgets/exam_details_screen.dart';
@@ -17,7 +18,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
   bool isLoadingTerms = true;
   bool isLoadingExams = false;
   Set<DropdownMenuItem<String>> periodTermList = {};
-  List ExamsList = [];
+  List examsList = [];
   String? selectedTermId;
 
   ScrollController scrollViewController = ScrollController();
@@ -25,7 +26,6 @@ class _ExamsScreenState extends State<ExamsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPeriodTermsList();
     scrollViewController.addListener(() {
@@ -101,7 +101,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                             List? exams = await api_calls.getExams(value, true);
 
                             setState(() {
-                              ExamsList = exams ?? [];
+                              examsList = exams ?? [];
                               isLoadingExams = false;
                             });
                           },
@@ -124,16 +124,16 @@ class _ExamsScreenState extends State<ExamsScreen> {
             Expanded(
               child: ListView.builder(
                 controller: scrollViewController,
-                itemCount: ExamsList.length,
+                itemCount: examsList.length,
                 itemBuilder: (context, index) {
                   return ExamCard(
-                    subjectCode: ExamsList[index]["SubjectCode"],
-                    subjectName: ExamsList[index]["SubjectName"],
-                    subjectComplianceResult: ExamsList[index]
+                    subjectCode: examsList[index]["SubjectCode"],
+                    subjectName: examsList[index]["SubjectName"],
+                    subjectComplianceResult: examsList[index]
                         ["SubjectComplianceResult"],
-                    examType: ExamsList[index]["ExamType"],
-                    startDate: ExamsList[index]["FromDate"],
-                    endDate: ExamsList[index]["ToDate"],
+                    examType: examsList[index]["ExamType"],
+                    startDate: examsList[index]["FromDate"],
+                    endDate: examsList[index]["ToDate"],
                   );
                 },
               ),
@@ -156,7 +156,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                 builder: (context) => AddExamScreen(termId: selectedTermId),
               )),
               label: const Text('Felvétel'),
-              icon: Icon(Icons.post_add_rounded),
+              icon: const Icon(Icons.post_add_rounded),
             ),
           ),
         ),
@@ -193,8 +193,8 @@ class ExamCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  trimString(subjectName ?? '', 30) ?? 'Nincs név',
-                  style: TextStyle(fontSize: 16),
+                  trimString(subjectName ?? '', 30),
+                  style: const TextStyle(fontSize: 16),
                 ),
                 Text(examType ?? 'Nincs követelmény'),
               ],
@@ -213,7 +213,7 @@ class ExamCard extends StatelessWidget {
                         applyToExam: false,
                       ),
                     )),
-                icon: Icon(Icons.info_outline))
+                icon: const Icon(Icons.info_outline))
           ],
         ),
       ),
