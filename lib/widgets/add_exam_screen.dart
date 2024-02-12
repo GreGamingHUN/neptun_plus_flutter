@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:neptun_plus_flutter/widgets/exam_details_screen.dart';
 import 'api_calls.dart' as api_calls;
