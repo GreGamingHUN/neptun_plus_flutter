@@ -23,3 +23,8 @@ jobs:
       - run: flutter --version
       - run: flutter pub get
       - run: flutter build apk --split-per-abi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: app/outputs/flutter-apk/*.apk # or path/to/artifact
