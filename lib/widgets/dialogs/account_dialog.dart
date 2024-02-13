@@ -71,7 +71,9 @@ class _AccountDialogState extends State<AccountDialog> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('loggedIn', false);
                       GoRouter.of(context).pushReplacement('/login');
                       Fluttertoast.showToast(msg: "Sikeresen kijelentkezve!");
                     },
