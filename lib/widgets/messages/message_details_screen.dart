@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 
 class MessageDetailsScreen extends StatefulWidget {
   MessageDetailsScreen(

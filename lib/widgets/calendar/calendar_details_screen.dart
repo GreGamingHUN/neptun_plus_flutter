@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class CalendarDetailsScreen extends StatelessWidget {
   const CalendarDetailsScreen(

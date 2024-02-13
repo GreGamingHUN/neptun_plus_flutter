@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class AccountDialog extends StatefulWidget {
   const AccountDialog({super.key});

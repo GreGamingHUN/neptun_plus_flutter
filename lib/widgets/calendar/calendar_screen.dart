@@ -1,8 +1,8 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:neptun_plus_flutter/widgets/calendar_details_screen.dart';
-import 'api_calls.dart' as api_calls;
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/widgets/calendar/calendar_details_screen.dart';
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class TimeTableScreen extends StatefulWidget {
   const TimeTableScreen({super.key});

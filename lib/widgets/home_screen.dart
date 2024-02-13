@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:neptun_plus_flutter/widgets/account_dialog.dart';
-import 'package:neptun_plus_flutter/widgets/added_subjects_screen.dart';
-import 'package:neptun_plus_flutter/widgets/exams_screen.dart';
-import 'package:neptun_plus_flutter/widgets/messages_screen.dart';
-import 'package:neptun_plus_flutter/widgets/timetable_screen.dart';
+import 'package:neptun_plus_flutter/widgets/dialogs/account_dialog.dart';
+import 'package:neptun_plus_flutter/widgets/subjects/added_subjects_screen.dart';
+import 'package:neptun_plus_flutter/widgets/exams/exams_screen.dart';
+import 'package:neptun_plus_flutter/widgets/messages/messages_screen.dart';
+import 'package:neptun_plus_flutter/widgets/calendar/calendar_screen.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

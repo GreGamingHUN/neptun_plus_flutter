@@ -1,8 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'api_calls.dart' as api_calls;
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class AddSubjectScreen extends StatefulWidget {
   AddSubjectScreen({super.key, required this.termId});

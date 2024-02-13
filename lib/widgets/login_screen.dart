@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'api_calls.dart' as api_calls;
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

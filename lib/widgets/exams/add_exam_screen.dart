@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:neptun_plus_flutter/widgets/exam_details_screen.dart';
-import 'api_calls.dart' as api_calls;
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/widgets/exams/exam_details_screen.dart';
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class AddExamScreen extends StatelessWidget {
   AddExamScreen({super.key, required this.termId});

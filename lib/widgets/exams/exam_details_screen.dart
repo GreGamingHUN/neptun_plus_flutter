@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:neptun_plus_flutter/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
 class ExamDetailsScreen extends StatelessWidget {
   ExamDetailsScreen(

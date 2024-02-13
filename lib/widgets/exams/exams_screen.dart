@@ -2,26 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:neptun_plus_flutter/logic.dart';
-import 'package:neptun_plus_flutter/widgets/add_subject_screen.dart';
-import 'api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/src/logic.dart';
+import 'package:neptun_plus_flutter/widgets/exams/add_exam_screen.dart';
+import 'package:neptun_plus_flutter/widgets/exams/exam_details_screen.dart';
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 
-class AddedSubjectsScreen extends StatefulWidget {
-  const AddedSubjectsScreen({super.key});
+class ExamsScreen extends StatefulWidget {
+  const ExamsScreen({super.key});
 
   @override
-  State<AddedSubjectsScreen> createState() => _AddedSubjectsScreenState();
+  State<ExamsScreen> createState() => _ExamsScreenState();
 }
 
-class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
+class _ExamsScreenState extends State<ExamsScreen> {
   bool isLoadingTerms = true;
-  bool isLoadingSubjects = false;
+  bool isLoadingExams = false;
   Set<DropdownMenuItem<String>> periodTermList = {};
-  List addedSubjectsList = [];
+  List examsList = [];
+  String? selectedTermId;
 
   ScrollController scrollViewController = ScrollController();
   bool floatingActionVisible = true;
-  String selectedTermId = '';
 
   @override
   void initState() {
@@ -93,16 +94,15 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
                           hint: const Text('Válassz félévet'),
                           items: periodTermList.toList(),
                           onChanged: (value) async {
-                            selectedTermId = value ?? '';
+                            selectedTermId = value;
                             setState(() {
-                              isLoadingSubjects = true;
+                              isLoadingExams = true;
                             });
-                            List? addedSubjects =
-                                await api_calls.getAddedSubjects(value);
+                            List? exams = await api_calls.getExams(value, true);
 
                             setState(() {
-                              addedSubjectsList = addedSubjects ?? [];
-                              isLoadingSubjects = false;
+                              examsList = exams ?? [];
+                              isLoadingExams = false;
                             });
                           },
                           decoration: InputDecoration(
@@ -113,7 +113,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
                 ),
               ),
             ),
-            (isLoadingSubjects
+            (isLoadingExams
                 ? const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Center(
@@ -124,16 +124,16 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
             Expanded(
               child: ListView.builder(
                 controller: scrollViewController,
-                itemCount: addedSubjectsList.length,
+                itemCount: examsList.length,
                 itemBuilder: (context, index) {
-                  return AddedSubjectCard(
-                    subjectCode: addedSubjectsList[index]["SubjectCode"],
-                    subjectName: addedSubjectsList[index]["SubjectName"],
-                    subjectComplianceResult: addedSubjectsList[index]
+                  return ExamCard(
+                    subjectCode: examsList[index]["SubjectCode"],
+                    subjectName: examsList[index]["SubjectName"],
+                    subjectComplianceResult: examsList[index]
                         ["SubjectComplianceResult"],
-                    subjectCredit: addedSubjectsList[index]["SubjectCredit"],
-                    subjectRequirement: addedSubjectsList[index]
-                        ["SubjectRequirement"],
+                    examType: examsList[index]["ExamType"],
+                    startDate: examsList[index]["FromDate"],
+                    endDate: examsList[index]["ToDate"],
                   );
                 },
               ),
@@ -142,7 +142,7 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
         ),
       ),
       floatingActionButton: Visibility(
-        visible: true,
+        visible: selectedTermId != null,
         maintainAnimation: true,
         maintainState: true,
         maintainInteractivity: false,
@@ -151,18 +151,13 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
           duration: const Duration(milliseconds: 100),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: (selectedTermId != ''
-                ? FloatingActionButton.extended(
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddSubjectScreen(termId: selectedTermId),
-                        )),
-                    label: const Text('Felvétel'),
-                    icon: const Icon(Icons.post_add_rounded),
-                  )
-                : null),
+            child: FloatingActionButton.extended(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AddExamScreen(termId: selectedTermId),
+              )),
+              label: const Text('Felvétel'),
+              icon: const Icon(Icons.post_add_rounded),
+            ),
           ),
         ),
       ),
@@ -170,19 +165,21 @@ class _AddedSubjectsScreenState extends State<AddedSubjectsScreen> {
   }
 }
 
-class AddedSubjectCard extends StatelessWidget {
-  AddedSubjectCard(
+class ExamCard extends StatelessWidget {
+  ExamCard(
       {super.key,
       required this.subjectName,
-      required this.subjectRequirement,
+      required this.examType,
       required this.subjectComplianceResult,
       required this.subjectCode,
-      required this.subjectCredit});
+      required this.startDate,
+      required this.endDate});
   String? subjectName;
-  String? subjectRequirement;
+  String? examType;
   String? subjectComplianceResult;
   String? subjectCode;
-  String? subjectCredit;
+  String? startDate;
+  String? endDate;
 
   @override
   Widget build(BuildContext context) {
@@ -199,10 +196,24 @@ class AddedSubjectCard extends StatelessWidget {
                   trimString(subjectName ?? '', 30),
                   style: const TextStyle(fontSize: 16),
                 ),
-                Text(subjectRequirement ?? 'Nincs követelmény'),
+                Text(examType ?? 'Nincs követelmény'),
               ],
             ),
-            Text('${subjectCredit ?? "?"} kredit')
+            IconButton(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExamDetailsScreen(
+                        subjectName: subjectName,
+                        examType: examType,
+                        subjectComplianceResult: subjectComplianceResult,
+                        subjectCode: subjectCode,
+                        startDate: startDate,
+                        endDate: endDate,
+                        applyToExam: false,
+                      ),
+                    )),
+                icon: const Icon(Icons.info_outline))
           ],
         ),
       ),
