@@ -58,50 +58,54 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(48.0),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: DropdownButtonFormField(
-                    hint: const Text('Válassz intézményt...'),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15))),
-                    items: fasz.toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selected = value;
-                        loginEnabled = true;
-                      });
-                    },
+            child: AutofillGroup(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: DropdownButtonFormField(
+                      hint: const Text('Válassz intézményt...'),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                      items: fasz.toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selected = value;
+                          loginEnabled = true;
+                        });
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
-                  child: TextFormField(
-                    onFieldSubmitted: (value) =>
-                        FocusScope.of(context).requestFocus(passwordField),
-                    focusNode: neptunCodeField,
-                    controller: neptunCodeController,
-                    decoration: InputDecoration(
-                        labelText: 'Neptunkód',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15))),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+                    child: TextFormField(
+                      autofillHints: const [AutofillHints.username],
+                      onFieldSubmitted: (value) =>
+                          FocusScope.of(context).requestFocus(passwordField),
+                      focusNode: neptunCodeField,
+                      controller: neptunCodeController,
+                      decoration: InputDecoration(
+                          labelText: 'Neptunkód',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: TextFormField(
-                    focusNode: passwordField,
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                        labelText: 'Jelszó',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15))),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextFormField(
+                      focusNode: passwordField,
+                      obscureText: true,
+                      controller: passwordController,
+                      autofillHints: const [AutofillHints.password],
+                      decoration: InputDecoration(
+                          labelText: 'Jelszó',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           IconButton.filled(
