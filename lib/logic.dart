@@ -23,6 +23,7 @@ String formatDate(String date,
     int dateNumber = int.parse(match.group(1)!);
     DateTime sendTime = DateTime.fromMillisecondsSinceEpoch(dateNumber);
     DateTime currentTime = DateTime.now();
+    sendTime = sendTime.subtract(sendTime.timeZoneOffset);
 
     if (forceDate) return DateFormat('MM. dd.').format(sendTime);
     if (forceTime) return DateFormat('HH:mm').format(sendTime);
