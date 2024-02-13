@@ -12,7 +12,11 @@ class TimeTableScreen extends StatefulWidget {
 }
 
 class _TimeTableScreenState extends State<TimeTableScreen> {
-  DateTime selectedDate = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+  }
+  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     return Column(
