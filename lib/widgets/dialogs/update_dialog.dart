@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:neptun_plus_flutter/src/updater.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class UpdateDialog extends StatelessWidget {
-  const UpdateDialog({super.key});
-
+  UpdateDialog({super.key, required this.changelog});
+  String changelog;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Új frissítés érhető el!', style: TextStyle(fontWeight: FontWeight.w600),),
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Egy új verzió érhető el, kérlek frissíts, hogy megkapd a legújabb feautre-öket és bugfixeket!'),
-          Divider(),
-          Text('A frissítés letölti az új apk file-t amit csak fel kell telepíteni.')
+          const Text('Egy új verzió érhető el, kérlek frissíts, hogy megkapd a legújabb feautre-öket és bugfixeket!'),
+          const Divider(),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16.0),
+            child: Text('Mi változott:', style: TextStyle(fontSize: 24),),
+          ),
+          Text(changelog)
         ],
       ),
       actions: [
