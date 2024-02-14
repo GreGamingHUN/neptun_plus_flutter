@@ -46,24 +46,26 @@ class _MessageDetailsScreenState extends State<MessageDetailsScreen> {
       appBar: AppBar(
         title: Text(widget.author),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-            child: Text(
-              widget.subject,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: Text(
+                widget.subject,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-            child: HtmlWidget(
-              widget.details,
-              onTapUrl: (p0) => launchUrl(Uri.parse(p0)),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+              child: HtmlWidget(
+                widget.details,
+                onTapUrl: (p0) => launchUrl(Uri.parse(p0)),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
