@@ -82,6 +82,7 @@ class _AccountDialogState extends State<AccountDialog> {
                     onPressed: () async {
                       final SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.setBool('loggedIn', false);
+                      // ignore: use_build_context_synchronously
                       GoRouter.of(context).pushReplacement('/login');
                       Fluttertoast.showToast(msg: "Sikeresen kijelentkezve!");
                     },
