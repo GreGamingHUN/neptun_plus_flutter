@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/dialogs/account_dialog.dart';
+import 'package:neptun_plus_flutter/widgets/dialogs/update_dialog.dart';
 import 'package:neptun_plus_flutter/widgets/subjects/added_subjects_screen.dart';
 import 'package:neptun_plus_flutter/widgets/exams/exams_screen.dart';
 import 'package:neptun_plus_flutter/widgets/messages/messages_screen.dart';
@@ -21,6 +23,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    checkUpdate();
+  }
+
+    void checkUpdate() async {
+    bool updateAvailable = await checkForUpdate();
+    if (updateAvailable) {
+      print('Update available!');
+      // ignore: use_build_context_synchronously
+      showDialog(context: context, builder: (context) => const UpdateDialog());
+    } else {
+      print('No updates available');
+    }
   }
 
   Future<bool> initSetup() async {
