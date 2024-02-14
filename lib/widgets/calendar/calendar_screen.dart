@@ -16,24 +16,46 @@ class _TimeTableScreenState extends State<TimeTableScreen> {
   void initState() {
     super.initState();
   }
-  DateTime selectedDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  DateTime selectedDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         EasyDateTimeLine(
+
           initialDate: selectedDate,
           onDateChange: (date) {
             setState(() {
               selectedDate = date;
             });
           },
+
           activeColor: Theme.of(context).colorScheme.primary,
-          dayProps: const EasyDayProps(
+          dayProps: EasyDayProps(
+            todayStyle: DayStyle(
+                dayNumStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20)),
             landScapeMode: true,
+            inactiveDayStyle: DayStyle(
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey),
+                        top: BorderSide(color: Colors.grey),
+                        left: BorderSide(color: Colors.grey),
+                        right: BorderSide(color: Colors.grey))),
+                dayNumStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20)),
             activeDayStyle: DayStyle(
-              borderRadius: 48.0,
-            ),
+                borderRadius: 48.0,
+                dayNumStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
             dayStructure: DayStructure.monthDayNumDayStr,
           ),
           headerProps: const EasyHeaderProps(

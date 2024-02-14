@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:neptun_plus_flutter/src/logic.dart' as logic;
@@ -16,11 +17,18 @@ class _AccountDialogState extends State<AccountDialog> {
   bool darkMode = false;
   String neptunCode = "";
   String trainingName = "";
+  String versionNumber ='v';
   late final SharedPreferences prefs;
   @override
   void initState() {
     getAccountData();
+    getVersionNumber();
     super.initState();
+  }
+
+  getVersionNumber() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    versionNumber = versionNumber + packageInfo.version;
   }
 
   getAccountData() async {
@@ -71,14 +79,18 @@ class _AccountDialogState extends State<AccountDialog> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('loggedIn', false);
+                      // ignore: use_build_context_synchronously
                       GoRouter.of(context).pushReplacement('/login');
                       Fluttertoast.showToast(msg: "Sikeresen kijelentkezve!");
                     },
                     child: const Text('Kijelentkezés')),
-              )
+              ),
             ],
-          )
+          ),
+          Text(versionNumber, style: const TextStyle(color: Colors.grey, fontSize: 11),)
         ],
       ),
     );

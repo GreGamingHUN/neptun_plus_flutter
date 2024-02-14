@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/dialogs/account_dialog.dart';
+import 'package:neptun_plus_flutter/widgets/dialogs/update_dialog.dart';
+import 'package:neptun_plus_flutter/widgets/settings/settings_screen.dart';
 import 'package:neptun_plus_flutter/widgets/subjects/added_subjects_screen.dart';
 import 'package:neptun_plus_flutter/widgets/exams/exams_screen.dart';
 import 'package:neptun_plus_flutter/widgets/messages/messages_screen.dart';
@@ -21,6 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    checkUpdate();
+  }
+
+    void checkUpdate() async {
+    String? updateAvailable = await checkForUpdate();
+    if (updateAvailable != null) {
+      // ignore: use_build_context_synchronously
+      showDialog(context: context, builder: (context) => UpdateDialog(changelog: updateAvailable,));
+    } else {
+    }
   }
 
   Future<bool> initSetup() async {
@@ -54,6 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 appBar: AppBar(
                   title: Text(pageNames[_currentPageIndex]),
                   centerTitle: true,
+                  leading: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton(onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen(),));
+                    }, icon: const Icon(Icons.settings_outlined)),
+                  ),
                   actions: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
