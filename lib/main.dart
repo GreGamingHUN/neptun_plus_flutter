@@ -1,12 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/home_screen.dart';
 import 'package:neptun_plus_flutter/widgets/login_screen.dart';
+import 'package:neptun_plus_flutter/widgets/settings/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -19,16 +18,14 @@ final GoRouter _router = GoRouter(routes: <RouteBase>[
       routes: <RouteBase>[
         GoRoute(
           path: 'login',
-          builder: (context, state) {
-            return const LoginScreen();
-          },
+          builder: (context, state) => const LoginScreen(),
         ),
         GoRoute(
           path: 'home',
-          builder: (context, state) {
-            return const HomeScreen();
-          },
-        )
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(path: 'settings',
+        builder: (context, state) => const SettingsScreen(),)
       ])
 ]);
 
