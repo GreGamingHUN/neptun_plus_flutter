@@ -26,9 +26,11 @@ Future<String?> checkForUpdate() async {
 
 
 Future<bool> downloadUpdate() async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  String localVersionNumber = packageInfo.version;
-  Uri downloadUrl = Uri.parse('${urls.downloadUpdateUrl}v$localVersionNumber/app-arm64-v8a-release.apk');
+  Uri url = Uri.parse(urls.githubLatestRelease);
+  Response response = await http.get(url);
+  Map<dynamic, dynamic> responseData = jsonDecode(response.body);
+  String latestVersionNumber = responseData['tag_name'].toString();
+  Uri downloadUrl = Uri.parse('${urls.downloadUpdateUrl}$latestVersionNumber/app-arm64-v8a-release.apk');
   launchUrl(downloadUrl);
   return true;
 }
