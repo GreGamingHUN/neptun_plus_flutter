@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:neptun_plus_flutter/widgets/messages/message_details_screen.dart';
 import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 import 'package:neptun_plus_flutter/src/logic.dart' as logic;
@@ -14,59 +15,55 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
-  int pageCount = 1;
+  int pageCount = 0;
+  List messages = List.empty(growable: true);
+
+  @override
+  void initState() {
+    super.initState();
+    loadMessages();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
+
+  loadMessages() async {
+    pageCount += 1;
+    List<dynamic>? messagesResponse = await api_calls.getMessages(pageCount);
+    setState(() {
+      messages.addAll(messagesResponse!);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List? messages = [];
-    return FutureBuilder(
-      future: api_calls.getMessages(pageCount),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (messages == []) {
-            messages = snapshot.data;
-          } else {
-            messages!.addAll(snapshot.data!.toList());
-          }
-          return ListView.builder(
-            itemCount: messages!.length + 1,
-            itemBuilder: (context, index) {
-              if (index >= messages!.length) {
-                return Center(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FilledButton(
-                      onPressed: () async {
-                        setState(() {
-                          pageCount += 1;
-                        });
-                      },
-                      child: const Text('További üzenetek betöltése')),
-                ));
-              }
-              return Column(
-                children: [
-                  MessageCard(
-                    id: messages![index]["Id"],
-                    author: messages![index]["Name"],
-                    details: messages![index]["Detail"],
-                    isNew: messages![index]["IsNew"],
-                    sendDate: messages![index]["SendDate"],
-                    subject: messages![index]["Subject"],
-                  ),
-                  const Divider(
-                    height: 1,
-                  )
-                ],
-              );
-            },
-          );
-        }
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      },
+    return LazyLoadScrollView(
+      onEndOfPage: () async => await loadMessages(),
+      scrollOffset: 200,
+      child: Scrollbar(
+        child: ListView.builder(
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                MessageCard(
+                  id: messages[index]["Id"],
+                  author: messages[index]["Name"],
+                  details: messages[index]["Detail"],
+                  isNew: messages[index]["IsNew"],
+                  sendDate: messages[index]["SendDate"],
+                  subject: messages[index]["Subject"],
+                ),
+                const Divider(
+                  height: 1,
+                )
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
