@@ -39,8 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )
         ],
       ),
-      body: Expanded(
-          child: ListView(
+      body: ListView(
         children: [
           ListTile(
             title: const Text('Frissítések keresése'),
@@ -59,7 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           )
         ],
-      )),
+      ),
     );
   }
 }
