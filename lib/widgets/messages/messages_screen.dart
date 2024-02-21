@@ -95,8 +95,8 @@ class _MessageCardState extends State<MessageCard> {
     return Hero(
       tag: Random().nextInt(100).toString(),
       child: ListTile(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => MessageDetailsScreen(
@@ -106,6 +106,9 @@ class _MessageCardState extends State<MessageCard> {
                       isNew: widget.isNew,
                       author: widget.author,
                       sendDate: widget.sendDate)));
+          setState(() {
+            widget.isNew = false;
+          });
         },
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
