@@ -25,8 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkUpdate();
+    getDefaultPage();
   }
-
+    void getDefaultPage() async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        _currentPageIndex = prefs.getInt('defaultPage') ?? 0;
+        setState(() {});
+    }
     void checkUpdate() async {
     String? updateAvailable = await checkForUpdate();
     if (updateAvailable != null) {
