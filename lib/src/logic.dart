@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String trimString(String input, int length) {
   return (input.length > length ? "${input.substring(0, length)}..." : input);
@@ -38,4 +41,24 @@ String formatDate(String date,
     return DateFormat('HH:mm').format(sendTime);
   }
   return 'NaN';
+}
+
+Future<List<Map<String, dynamic>>> getPageOrder() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> pageOrder = prefs.getStringList('pageOrder') ?? [];
+
+  List<Map<String, dynamic>> defaultOrderMap = [
+    {'messages': 'Üzenetek'},
+    {'timetable': 'Órarend'},
+    {'subjects': 'Tárgyak'},
+    {'exams': 'Vizsgák'}
+  ];
+  if (pageOrder.isEmpty) {
+    return defaultOrderMap;
+  }
+  List<Map<String, dynamic>> orderMap = [];
+  for (String page in pageOrder) {
+    orderMap.add(jsonDecode(page));
+  }
+  return orderMap;
 }

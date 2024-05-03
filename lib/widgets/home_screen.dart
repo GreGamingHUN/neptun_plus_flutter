@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/dialogs/account_dialog.dart';
@@ -26,18 +29,72 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     checkUpdate();
     getDefaultPage();
+    checkPageOrder();
   }
-    void getDefaultPage() async {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        _currentPageIndex = prefs.getInt('defaultPage') ?? 0;
-        setState(() {});
-    }
-    void checkUpdate() async {
+
+  void getDefaultPage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _currentPageIndex = prefs.getInt('defaultPage') ?? 0;
+    setState(() {});
+  }
+
+  void checkUpdate() async {
     String? updateAvailable = await checkForUpdate();
     if (updateAvailable != null) {
       // ignore: use_build_context_synchronously
-      showDialog(context: context, builder: (context) => UpdateDialog(changelog: updateAvailable,));
-    } else {
+      showDialog(
+          context: context,
+          builder: (context) => UpdateDialog(
+                changelog: updateAvailable,
+              ));
+    } else {}
+  }
+
+  List<Widget> pages = [
+    MessagesScreen(),
+    TimeTableScreen(),
+    AddedSubjectsScreen(),
+    ExamsScreen()
+  ];
+
+  void checkPageOrder() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> pageOrder = prefs.getStringList('pageOrder') ?? [];
+    List<Map<String, dynamic>> pageOrderMap = [];
+    for (String page in pageOrder) {
+      pageOrderMap.add(jsonDecode(page));
+    }
+    if (pageOrder.isNotEmpty) {
+      List<Widget> newPages = [];
+      List<String> newPageNames = [];
+      List<Icon> newIcons = [];
+      for (Map<String, dynamic> page in pageOrderMap) {
+        newPageNames.add(page.values.first);
+        switch (page.keys.first) {
+          case 'messages':
+            newPages.add(MessagesScreen());
+            newIcons.add(Icon(Icons.mail_outlined));
+            break;
+          case 'timetable':
+            newPages.add(TimeTableScreen());
+            newIcons.add(Icon(Icons.calendar_month_outlined));
+            break;
+          case 'subjects':
+            newPages.add(AddedSubjectsScreen());
+            newIcons.add(Icon(Icons.book_outlined));
+            break;
+          case 'exams':
+            newPages.add(ExamsScreen());
+            newIcons.add(Icon(Icons.bookmark_outline));
+            break;
+          default:
+            Fluttertoast.showToast(msg: "Hiba történt az oldalok betöltésekor!");
+        }
+      }
+      pages = newPages;
+      pageNames = newPageNames;
+      pageIcons = newIcons;
+      setState(() {});
     }
   }
 
@@ -56,8 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> pageNames = [
     'Üzenetek',
     'Órarend',
-    'Felvett Tárgyak',
-    'Felvett Vizsgák'
+    'Tárgyak',
+    'Vizsgák'
+  ];
+
+  List<Icon> pageIcons = [
+    const Icon(Icons.mail_outlined),
+    const Icon(Icons.calendar_month_outlined),
+    const Icon(Icons.book_outlined),
+    const Icon(Icons.bookmark_outlined)
   ];
   @override
   Widget build(BuildContext context) {
@@ -74,9 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   centerTitle: true,
                   leading: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: IconButton(onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen(),));
-                    }, icon: const Icon(Icons.settings_outlined)),
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SettingsScreen(),
+                              ));
+                        },
+                        icon: const Icon(Icons.settings_outlined)),
                   ),
                   actions: [
                     Padding(
@@ -94,12 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ],
                 ),
-                body: const [
-                  MessagesScreen(),
-                  TimeTableScreen(),
-                  AddedSubjectsScreen(),
-                  ExamsScreen()
-                ][_currentPageIndex],
+                body: pages[_currentPageIndex],
                 bottomNavigationBar: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SalomonBottomBar(
@@ -107,25 +172,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedItemColor: Theme.of(context).colorScheme.primary,
                     items: [
                       SalomonBottomBarItem(
-                          icon: Icon((_currentPageIndex == 0
-                              ? Icons.mail
-                              : Icons.mail_outlined)),
-                          title: const Text("Üzenetek")),
+                          icon: pageIcons[0],
+                          title: Text(pageNames[0])),
                       SalomonBottomBarItem(
-                          icon: Icon((_currentPageIndex == 1
-                              ? Icons.calendar_month
-                              : Icons.calendar_month_outlined)),
-                          title: const Text("Órarend")),
+                          icon: pageIcons[1],
+                          title: Text(pageNames[1])),
                       SalomonBottomBarItem(
-                          icon: Icon((_currentPageIndex == 2
-                              ? Icons.book
-                              : Icons.book_outlined)),
-                          title: const Text("Tárgyak")),
+                          icon: pageIcons[2],
+                          title: Text(pageNames[2])),
                       SalomonBottomBarItem(
-                          icon: Icon((_currentPageIndex == 3
-                              ? Icons.bookmark
-                              : Icons.bookmark_outline)),
-                          title: const Text("Vizsgák")),
+                          icon: pageIcons[3],
+                          title: Text(pageNames[3])),
                     ],
                     currentIndex: _currentPageIndex,
                     onTap: (p0) {

@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
+import 'package:neptun_plus_flutter/src/logic.dart';
 import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/dialogs/update_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +19,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   String appVersion = '';
   int defaultPage = 0;
-  
+  bool isOrderChanged = false;
+
   @override
   void initState() {
     getVersion();
@@ -81,11 +87,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
                 onChanged: (int? value) async {
                   bool success = await setDefaultPage(value);
-                  Fluttertoast.showToast(msg: '${success ? 'Sikeres' : 'Sikertelen'} mentés');
+                  Fluttertoast.showToast(
+                      msg: '${success ? 'Sikeres' : 'Sikertelen'} mentés');
                 },
                 decoration: const InputDecoration(border: InputBorder.none),
               ),
             ),
+          ),
+          ListTile(
+            title: const Text('Oldalak sorrendje'),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => const PageOrderSelector(),
+              ).then((value) {
+                if (value != null && value == true) {
+                  isOrderChanged = true;
+                }
+              });
+            },
           ),
           const Divider(),
           ListTile(
@@ -107,5 +127,167 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+}
+
+class PageOrderSelector extends StatefulWidget {
+  const PageOrderSelector({
+    super.key,
+  });
+
+  @override
+  State<PageOrderSelector> createState() => _PageOrderSelectorState();
+}
+
+class _PageOrderSelectorState extends State<PageOrderSelector> {
+  List<Map<String, dynamic>> pages = [];
+  @override
+  void initState() {
+    getPages();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Oldalak sorrendje',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              width: 300,
+              height: 270,
+              child: ReorderableListView.builder(
+                itemBuilder: (context, index) => ListTile(
+                  key: Key(index.toString()),
+                  title: Text(pages[index].values.first),
+                ),
+                itemCount: pages.length,
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    final Map<String, dynamic> item = pages.removeAt(oldIndex);
+                    pages.insert(newIndex, item);
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Mégse'),
+                    ),
+                  ),
+                  FilledButton(
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      List<String> pageOrder = [];
+                      for (Map<String, dynamic> page in pages) {
+                        pageOrder.add(jsonEncode(page));
+                      }
+                      prefs.setStringList('pageOrder', pageOrder);
+                      Navigator.pop(context, true);
+                      showDialog(context: context, builder: (context) => AlertDialog(
+                        title: const Text('Figyelmeztetés'),
+                        content: const Text('Az oldalak sorrendjének módosításához újraindítás szükséges!'),
+                        actions: [
+                          TextButton(onPressed: () => GoRouter.of(context).go('/'), child: const Text('Újraindítás')),
+                          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Később')),],
+                      ),);
+                    },
+                    child: const Text('Mentés'),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+
+    /* return Dialog(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Oldalak Sorrendje',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 235,
+              child: FutureBuilder(
+                future: getPageOrder(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ReorderableListView(
+                      children: [
+                        for (Map<String, String> page in snapshot.data!)
+                          ListTile(
+                            key: ValueKey(page.keys.first),
+                            title: Text(page.values.first),
+                          )
+                      ],
+                      onReorder: (oldIndex, newIndex) {
+                        setState(() {
+                          if (oldIndex < newIndex) {
+                            newIndex -= 1;
+                          }
+                          final Map<String, String> item =
+                              snapshot.data!.removeAt(oldIndex);
+                          snapshot.data!.insert(newIndex, item);
+                        });
+                      },
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Mégse'),
+                  ),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Mentés'),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ); */
+  }
+
+  void getPages() async {
+    pages = await getPageOrder();
+    setState(() {});
   }
 }
