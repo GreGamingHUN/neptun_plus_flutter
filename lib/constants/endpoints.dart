@@ -1,8 +1,8 @@
-const String getMessages = "GetMessages";
-const String getTrainings = "GetTrainings";
-const String getPeriodTerms = "GetPeriodTerms";
-const String getAddedSubjects = "GetAddedSubjects";
-const String setReadedMessage = "SetReadedMessage";
+const String getMessages = "GetMessages"; //done
+const String getTrainings = "GetTrainings"; //done
+const String getPeriodTerms = "GetPeriodTerms"; //done
+const String getAddedSubjects = "GetAddedSubjects"; //done
+const String setReadedMessage = "SetReadedMessage"; //done
 const String getExams = "GetExams";
 const String getCalendarData = "GetCalendarData";
 const String getSubjects = 'GetSubjects';

@@ -10,7 +10,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<List<dynamic>> getInstitutes() async {
   Uri url = Uri.parse(urls.institutesUrl);
   Response response = await http.get(url);
-  return jsonDecode(response.body);
+  List<dynamic> responseBody = jsonDecode(response.body);
+  responseBody.add({
+    "Languages": "HU,EN,DE",
+    "Name": "Példa Egyetem",
+    "NeptunMobileServiceVersion": 0,
+    "OMCode": "FA69420",
+    "Url": "http://192.168.1.179:3000"
+  });
+  return responseBody;
 }
 
 Map<dynamic, dynamic> defaultBody = {
