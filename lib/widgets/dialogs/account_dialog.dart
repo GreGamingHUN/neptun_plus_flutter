@@ -17,7 +17,7 @@ class _AccountDialogState extends State<AccountDialog> {
   bool darkMode = false;
   String neptunCode = "";
   String trainingName = "";
-  String versionNumber ='v';
+  String versionNumber = 'v';
   late final SharedPreferences prefs;
   @override
   void initState() {
@@ -74,13 +74,19 @@ class _AccountDialogState extends State<AccountDialog> {
               title: const Text("Sötét mód")),
           Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              Text(
+                versionNumber,
+                style: const TextStyle(color: Colors.grey, fontSize: 11),
+              ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(top: 24.0),
                 child: OutlinedButton(
                     onPressed: () async {
-                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
                       prefs.setBool('loggedIn', false);
                       // ignore: use_build_context_synchronously
                       GoRouter.of(context).pushReplacement('/login');
@@ -90,7 +96,6 @@ class _AccountDialogState extends State<AccountDialog> {
               ),
             ],
           ),
-          Text(versionNumber, style: const TextStyle(color: Colors.grey, fontSize: 11),)
         ],
       ),
     );
