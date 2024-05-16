@@ -70,19 +70,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 items: const [
                   DropdownMenuItem(
                     value: 0,
-                    child: Text('Üzenetek'),
+                    child: Text('1. oldal'),
                   ),
                   DropdownMenuItem(
                     value: 1,
-                    child: Text('Órarend'),
+                    child: Text('2. oldal'),
                   ),
                   DropdownMenuItem(
                     value: 2,
-                    child: Text('Tárgyak'),
+                    child: Text('3. oldal'),
                   ),
                   DropdownMenuItem(
                     value: 3,
-                    child: Text('Vizsgák'),
+                    child: Text('4. oldal'),
                   )
                 ],
                 onChanged: (int? value) async {
@@ -222,68 +222,6 @@ class _PageOrderSelectorState extends State<PageOrderSelector> {
         ),
       ),
     );
-
-    /* return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Oldalak Sorrendje',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 235,
-              child: FutureBuilder(
-                future: getPageOrder(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ReorderableListView(
-                      children: [
-                        for (Map<String, String> page in snapshot.data!)
-                          ListTile(
-                            key: ValueKey(page.keys.first),
-                            title: Text(page.values.first),
-                          )
-                      ],
-                      onReorder: (oldIndex, newIndex) {
-                        setState(() {
-                          if (oldIndex < newIndex) {
-                            newIndex -= 1;
-                          }
-                          final Map<String, String> item =
-                              snapshot.data!.removeAt(oldIndex);
-                          snapshot.data!.insert(newIndex, item);
-                        });
-                      },
-                    );
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Mégse'),
-                  ),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Mentés'),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    ); */
   }
 
   void getPages() async {
