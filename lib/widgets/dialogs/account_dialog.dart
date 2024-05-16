@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:neptun_plus_flutter/widgets/dialogs/change_password_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -60,18 +61,38 @@ class _AccountDialogState extends State<AccountDialog> {
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           Text(trainingName),
-          SwitchListTile(
-              value: darkMode,
-              onChanged: (value) {
-                if (value == true) {
-                  ThemeProvider.controllerOf(context).setTheme("light");
-                } else {
-                  ThemeProvider.controllerOf(context).setTheme("dark");
-                }
-                darkMode = !darkMode;
-                prefs.setBool("darkMode", darkMode);
-              },
-              title: const Text("Sötét mód")),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Card(
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                        value: darkMode,
+                        onChanged: (value) {
+                          if (value == true) {
+                            ThemeProvider.controllerOf(context).setTheme("light");
+                          } else {
+                            ThemeProvider.controllerOf(context).setTheme("dark");
+                          }
+                          darkMode = !darkMode;
+                          prefs.setBool("darkMode", darkMode);
+                        },
+                        title: const Text("Sötét mód")),
+                    ListTile(
+                      title: const Text("Jelszó változtatása"),
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog(context: context, builder: (context) => ChangePasswordWidget(),);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
