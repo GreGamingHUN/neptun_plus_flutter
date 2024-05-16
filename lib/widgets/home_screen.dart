@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const Icon(Icons.mail_outlined),
     const Icon(Icons.calendar_month_outlined),
     const Icon(Icons.book_outlined),
-    const Icon(Icons.bookmark_outlined)
+    const Icon(Icons.bookmark_outline)
   ];
   @override
   Widget build(BuildContext context) {
