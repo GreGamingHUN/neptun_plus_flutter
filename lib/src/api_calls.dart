@@ -16,7 +16,7 @@ Future<List<dynamic>> getInstitutes() async {
     "Name": "Példa Egyetem",
     "NeptunMobileServiceVersion": 0,
     "OMCode": "FA69420",
-    "Url": "http://192.168.1.179:3000"
+    "Url": "http://192.168.1.179:3000/api"
   });
   return responseBody;
 }
@@ -366,6 +366,36 @@ Future<List?> getCalendarData(DateTime day) async {
     Map responseBody = jsonDecode(response.body);
     if (responseBody["ErrorMessage"] == null) {
       return responseBody["calendarData"];
+    }
+  } on SocketException {
+    return null;
+  }
+  return null;
+}
+
+Future<String?> setNewPassword(newPassword) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+
+  Uri url = await createEndpointUrl(endpoints.setNewPassword);
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+  body.addAll({
+    "NewPassword": newPassword
+  });
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("password", newPassword);
+      return null;
     }
   } on SocketException {
     return null;
