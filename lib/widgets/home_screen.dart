@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/src/updater.dart';
 import 'package:neptun_plus_flutter/widgets/dialogs/account_dialog.dart';
@@ -88,7 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
             newIcons.add(Icon(Icons.bookmark_outline));
             break;
           default:
-            Fluttertoast.showToast(msg: "Hiba történt az oldalok betöltésekor!");
+            Fluttertoast.showToast(
+                msg: "Hiba történt az oldalok betöltésekor!");
         }
       }
       pages = newPages;
@@ -110,12 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool switchState = false;
-  List<String> pageNames = [
-    'Üzenetek',
-    'Órarend',
-    'Tárgyak',
-    'Vizsgák'
-  ];
+  List<String> pageNames = ['Üzenetek', 'Órarend', 'Tárgyak', 'Vizsgák'];
 
   List<Icon> pageIcons = [
     const Icon(Icons.mail_outlined),
@@ -172,17 +167,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectedItemColor: Theme.of(context).colorScheme.primary,
                     items: [
                       SalomonBottomBarItem(
-                          icon: pageIcons[0],
-                          title: Text(pageNames[0])),
+                          icon: pageIcons[0], title: Text(pageNames[0])),
                       SalomonBottomBarItem(
-                          icon: pageIcons[1],
-                          title: Text(pageNames[1])),
+                          icon: pageIcons[1], title: Text(pageNames[1])),
                       SalomonBottomBarItem(
-                          icon: pageIcons[2],
-                          title: Text(pageNames[2])),
+                          icon: pageIcons[2], title: Text(pageNames[2])),
                       SalomonBottomBarItem(
-                          icon: pageIcons[3],
-                          title: Text(pageNames[3])),
+                          icon: pageIcons[3], title: Text(pageNames[3])),
                     ],
                     currentIndex: _currentPageIndex,
                     onTap: (p0) {

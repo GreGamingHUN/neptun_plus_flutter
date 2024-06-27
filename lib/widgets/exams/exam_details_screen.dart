@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/src/logic.dart' as logic;
+import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 
 class ExamDetailsScreen extends StatelessWidget {
   ExamDetailsScreen(
@@ -12,7 +14,8 @@ class ExamDetailsScreen extends StatelessWidget {
       required this.subjectCode,
       required this.startDate,
       required this.endDate,
-      required this.applyToExam});
+      required this.applyToExam,
+      required this.examID});
 
   String? subjectName;
   String? examType;
@@ -20,6 +23,7 @@ class ExamDetailsScreen extends StatelessWidget {
   String? subjectCode;
   String? startDate;
   String? endDate;
+  String? examID;
   bool applyToExam;
 
   @override
@@ -29,12 +33,18 @@ class ExamDetailsScreen extends StatelessWidget {
         title: const Text('Részletek'),
       ),
       floatingActionButton: (applyToExam
-          ? const Padding(
-              padding: EdgeInsets.all(8.0),
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
               child: FloatingActionButton.extended(
-                  icon: Icon(Icons.post_add_rounded),
-                  onPressed: null,
-                  label: Text('Jelentkezés')),
+                  icon: const Icon(Icons.post_add_rounded),
+                  onPressed: () async {
+                    String? examSigningResult = await api_calls.setExamSigning(examID);
+                    if (examSigningResult == "") {
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(msg: "Sikeres vizsgajelentkezés");
+                    }
+                  },
+                  label: const Text('Jelentkezés')),
             )
           : null),
       body: Column(

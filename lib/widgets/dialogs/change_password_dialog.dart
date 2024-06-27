@@ -5,8 +5,8 @@ import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
 
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController passwordAgainController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordAgainController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

@@ -127,6 +127,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                 itemCount: examsList.length,
                 itemBuilder: (context, index) {
                   return ExamCard(
+                    examID: examsList[index]["ExamID"],
                     subjectCode: examsList[index]["SubjectCode"],
                     subjectName: examsList[index]["SubjectName"],
                     subjectComplianceResult: examsList[index]
@@ -173,13 +174,15 @@ class ExamCard extends StatelessWidget {
       required this.subjectComplianceResult,
       required this.subjectCode,
       required this.startDate,
-      required this.endDate});
+      required this.endDate,
+      required this.examID});
   String? subjectName;
   String? examType;
   String? subjectComplianceResult;
   String? subjectCode;
   String? startDate;
   String? endDate;
+  String? examID;
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +207,7 @@ class ExamCard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ExamDetailsScreen(
+                        examID: examID,
                         subjectName: subjectName,
                         examType: examType,
                         subjectComplianceResult: subjectComplianceResult,

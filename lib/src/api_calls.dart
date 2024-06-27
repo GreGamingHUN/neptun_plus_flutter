@@ -402,3 +402,32 @@ Future<String?> setNewPassword(newPassword) async {
   }
   return null;
 }
+
+
+Future<String?> setExamSigning(examId) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.setExamSigning);
+
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["ExamId"] = examId;
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return "";
+    } else {
+      return responseBody["ErrorMessage"];
+    }
+  } on SocketException {
+    //TODO: handle error
+  }
+}

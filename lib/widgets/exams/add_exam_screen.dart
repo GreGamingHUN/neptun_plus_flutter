@@ -65,6 +65,7 @@ class AddExamBody extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ExamDetailsScreen(
                       subjectName: examsList?[index]['SubjectName'],
+                      examID: examsList?[index]['ExamID'],
                       examType: examsList?[index]['examType'],
                       subjectComplianceResult: examsList?[index]
                           ['subjectComplianceResult'],

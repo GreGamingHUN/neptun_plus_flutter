@@ -33,7 +33,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
     pageCount += 1;
     List<dynamic>? messagesResponse = await api_calls.getMessages(pageCount);
     setState(() {
-      messages.addAll(messagesResponse!);
+      messages.addAll(messagesResponse ?? []);
     });
   }
 
