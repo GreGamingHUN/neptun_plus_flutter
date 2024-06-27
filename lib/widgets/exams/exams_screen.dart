@@ -127,6 +127,7 @@ class _ExamsScreenState extends State<ExamsScreen> {
                 itemCount: examsList.length,
                 itemBuilder: (context, index) {
                   return ExamCard(
+                    status: examsList[index]["status"],
                     examID: examsList[index]["ExamID"],
                     subjectCode: examsList[index]["SubjectCode"],
                     subjectName: examsList[index]["SubjectName"],
@@ -175,7 +176,9 @@ class ExamCard extends StatelessWidget {
       required this.subjectCode,
       required this.startDate,
       required this.endDate,
-      required this.examID});
+      required this.examID,
+      required this.status});
+
   String? subjectName;
   String? examType;
   String? subjectComplianceResult;
@@ -183,10 +186,20 @@ class ExamCard extends StatelessWidget {
   String? startDate;
   String? endDate;
   String? examID;
+  String? status;
 
   @override
   Widget build(BuildContext context) {
+    Color cardColor;
+    if (status == "passed") {
+      cardColor = const Color.fromARGB(255, 213, 239, 186);
+    } else if (status == "failed") {
+      cardColor = const Color.fromARGB(255, 242, 165, 159);
+    } else {
+      cardColor = const Color.fromARGB(255, 248, 239, 177);
+    }
     return Card(
+      color: cardColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -197,12 +210,13 @@ class ExamCard extends StatelessWidget {
               children: [
                 Text(
                   trimString(subjectName ?? '', 30),
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
-                Text(examType ?? 'Nincs követelmény'),
+                Text(examType ?? 'Nincs követelmény', style: const TextStyle(color: Colors.black),),
               ],
             ),
             IconButton(
+              color: Colors.black,
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(

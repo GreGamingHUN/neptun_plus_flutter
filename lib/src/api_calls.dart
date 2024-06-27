@@ -404,7 +404,7 @@ Future<String?> setNewPassword(newPassword) async {
 }
 
 
-Future<String?> setExamSigning(examId) async {
+Future<String?> setExamSigning(examId, signingOn) async {
   if (!(await checkLogin())) {
     return null;
   }
@@ -417,6 +417,7 @@ Future<String?> setExamSigning(examId) async {
   body["Password"] = loginDetails["password"];
 
   body["ExamId"] = examId;
+  body["SigningOn"] = signingOn;
 
   try {
     Response response =

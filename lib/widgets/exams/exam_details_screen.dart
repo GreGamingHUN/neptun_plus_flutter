@@ -32,21 +32,24 @@ class ExamDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Részletek'),
       ),
-      floatingActionButton: (applyToExam
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton.extended(
-                  icon: const Icon(Icons.post_add_rounded),
-                  onPressed: () async {
-                    String? examSigningResult = await api_calls.setExamSigning(examID);
-                    if (examSigningResult == "") {
-                      Navigator.pop(context);
-                      Fluttertoast.showToast(msg: "Sikeres vizsgajelentkezés");
-                    }
-                  },
-                  label: const Text('Jelentkezés')),
-            )
-          : null),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton.extended(
+            icon: const Icon(Icons.post_add_rounded),
+            onPressed: () async {
+              String? examSigningResult =
+                  await api_calls.setExamSigning(examID, applyToExam);
+              if (examSigningResult == "") {
+                Navigator.pop(context);
+                Fluttertoast.showToast(
+                    msg:
+                        "Sikeres ${applyToExam ? "jelentkezés" : "leadás"} a vizsgára!");
+              } else {
+                Fluttertoast.showToast(msg: examSigningResult ?? "Ismeretlen hiba");
+              }
+            },
+            label: Text(applyToExam ? 'Jelentkezés' : 'Leadás')),
+      ),
       body: Column(
         children: [
           Text(subjectName ?? 'Nincs név'),
