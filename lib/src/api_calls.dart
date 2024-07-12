@@ -432,3 +432,60 @@ Future<String?> setExamSigning(examId, signingOn) async {
     //TODO: handle error
   }
 }
+
+Future<String?> saveSubject(subjectId, courseCode) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.saveSubject);
+
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["SubjectId"] = subjectId;
+  body["CourseCode"] = courseCode;
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return "";
+    } else {
+      return responseBody["ErrorMessage"];
+    }
+  } on SocketException {
+    //TODO: handle error
+  }
+}
+
+Future<String?> deleteSubject(subjectCode) async {
+  if (!(await checkLogin())) {
+    return null;
+  }
+  Uri url = await createEndpointUrl(endpoints.deleteSubject);
+
+  Map loginDetails = await getLoginDetails();
+
+  Map<dynamic, dynamic> body = defaultBody;
+  body["UserLogin"] = loginDetails["neptunCode"];
+  body["Password"] = loginDetails["password"];
+
+  body["SubjectCode"] = subjectCode;
+
+  try {
+    Response response =
+        await http.post(url, body: jsonEncode(body), headers: defaultHeader);
+    Map responseBody = jsonDecode(response.body);
+    if (responseBody["ErrorMessage"] == null) {
+      return "";
+    } else {
+      return responseBody["ErrorMessage"];
+    }
+  } on SocketException {
+    //TODO: handle error
+  }
+}
