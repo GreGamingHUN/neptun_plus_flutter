@@ -80,10 +80,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: 2,
                     child: Text('3. oldal'),
                   ),
-                  DropdownMenuItem(
-                    value: 3,
-                    child: Text('4. oldal'),
-                  )
                 ],
                 onChanged: (int? value) async {
                   bool success = await setDefaultPage(value);

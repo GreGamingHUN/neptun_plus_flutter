@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> pages = [
     MessagesScreen(),
-    TimeTableScreen(),
     AddedSubjectsScreen(),
     ExamsScreen()
   ];
@@ -73,10 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
           case 'messages':
             newPages.add(MessagesScreen());
             newIcons.add(Icon(Icons.mail_outlined));
-            break;
-          case 'timetable':
-            newPages.add(TimeTableScreen());
-            newIcons.add(Icon(Icons.calendar_month_outlined));
             break;
           case 'subjects':
             newPages.add(AddedSubjectsScreen());
@@ -172,8 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           icon: pageIcons[1], title: Text(pageNames[1])),
                       SalomonBottomBarItem(
                           icon: pageIcons[2], title: Text(pageNames[2])),
-                      SalomonBottomBarItem(
-                          icon: pageIcons[3], title: Text(pageNames[3])),
                     ],
                     currentIndex: _currentPageIndex,
                     onTap: (p0) {

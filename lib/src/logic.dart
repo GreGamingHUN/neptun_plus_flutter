@@ -49,7 +49,6 @@ Future<List<Map<String, dynamic>>> getPageOrder() async {
 
   List<Map<String, dynamic>> defaultOrderMap = [
     {'messages': 'Üzenetek'},
-    {'timetable': 'Órarend'},
     {'subjects': 'Tárgyak'},
     {'exams': 'Vizsgák'}
   ];
