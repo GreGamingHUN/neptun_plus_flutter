@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
 import 'package:neptun_plus_flutter/src/logic.dart' as logic;
 
@@ -99,13 +100,7 @@ class _AddSubjectBodyState extends State<AddSubjectBody> {
       itemCount: widget.subjectsList!.length + 1,
       itemBuilder: (context, index) {
         if (index >= widget.subjectsList!.length) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FilledButton(
-                  onPressed: () {},
-                  child: const Text('további tárgyak betöltése')),
-            ),
+          return const Center(
           );
         }
 
@@ -149,6 +144,7 @@ class CoursesListDialog extends StatelessWidget {
     return Dialog(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Padding(
             padding: EdgeInsets.all(16.0),
@@ -168,6 +164,11 @@ class CoursesListDialog extends StatelessWidget {
                 }
 
                 if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text('Nincs elérhető kurzus'),
+                    );
+                  }
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
@@ -179,6 +180,15 @@ class CoursesListDialog extends StatelessWidget {
                                 35)),
                             subtitle:
                                 Text(snapshot.data?[index]["CourseTutor"]),
+                            trailing: IconButton(icon: const Icon(Icons.add), onPressed: () async {
+                              String? saveSubjectResult = await api_calls.saveSubject(subjectId, snapshot.data?[index]["CourseCode"]);
+                              if (saveSubjectResult == "") {
+                                Navigator.pop(context);
+                                Fluttertoast.showToast(msg: "Sikeres tárgyfelvétel!");
+                              } else {
+                                Fluttertoast.showToast(msg: saveSubjectResult ?? "Ismeretlen hiba");
+                              }
+                            },),
                           ),
                           const Divider(
                             height: 1,
