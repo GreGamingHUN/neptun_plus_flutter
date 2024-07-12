@@ -39,30 +39,26 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LazyLoadScrollView(
-      onEndOfPage: () async => await loadMessages(),
-      scrollOffset: 200,
-      child: Scrollbar(
-        child: ListView.builder(
-          itemCount: messages.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                MessageCard(
-                  id: messages[index]["Id"],
-                  author: messages[index]["Name"],
-                  details: messages[index]["Detail"],
-                  isNew: messages[index]["IsNew"],
-                  sendDate: messages[index]["SendDate"],
-                  subject: messages[index]["Subject"],
-                ),
-                const Divider(
-                  height: 1,
-                )
-              ],
-            );
-          },
-        ),
+    return Scrollbar(
+      child: ListView.builder(
+        itemCount: messages.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              MessageCard(
+                id: messages[index]["Id"],
+                author: messages[index]["Name"],
+                details: messages[index]["Detail"],
+                isNew: messages[index]["IsNew"],
+                sendDate: messages[index]["SendDate"],
+                subject: messages[index]["Subject"],
+              ),
+              const Divider(
+                height: 1,
+              )
+            ],
+          );
+        },
       ),
     );
   }
