@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:neptun_plus_flutter/src/logic.dart';
 import 'package:neptun_plus_flutter/widgets/subjects/add_subject_screen.dart';
 import 'package:neptun_plus_flutter/src/api_calls.dart' as api_calls;
+import 'package:neptun_plus_flutter/widgets/subjects/subject_dialog.dart';
 
 class AddedSubjectsScreen extends StatefulWidget {
   const AddedSubjectsScreen({super.key});
@@ -186,7 +187,15 @@ class AddedSubjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color cardColor;
+    cardColor = const Color.fromARGB(255, 213, 239, 186);
+    if (subjectComplianceResult == "Elégtelen (1)") {
+      cardColor = const Color.fromARGB(255, 242, 165, 159);
+    } else if (subjectComplianceResult == "") {
+      cardColor = const Color.fromARGB(255, 248, 239, 177);
+    }
     return Card(
+      color: cardColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -197,12 +206,31 @@ class AddedSubjectCard extends StatelessWidget {
               children: [
                 Text(
                   trimString(subjectName ?? '', 30),
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
-                Text(subjectRequirement ?? 'Nincs követelmény'),
+                Text((subjectRequirement ?? 'Nincs követelmény') + '·' + '${subjectCredit ?? "?"} kredit',
+                style: const TextStyle(color: Colors.black)
+                ),
               ],
             ),
-            Text('${subjectCredit ?? "?"} kredit')
+            Row(
+              children: [
+                Text(subjectComplianceResult != "" ? subjectComplianceResult!.split('(')[1].split(')')[0] : '',
+                style: const TextStyle(color: Colors.black, fontSize: 25),),
+                IconButton(onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => DialogDetails(
+                      subjectName: subjectName,
+                      subjectRequirement: subjectRequirement,
+                      subjectComplianceResult: subjectComplianceResult,
+                      subjectCode: subjectCode,
+                      subjectCredit: subjectCredit,
+                    )
+                  );
+                }, icon: Icon(Icons.info_outline), color: Colors.black,),
+              ],
+            )
           ],
         ),
       ),
