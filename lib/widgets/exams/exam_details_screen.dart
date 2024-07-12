@@ -43,7 +43,7 @@ class ExamDetailsScreen extends StatelessWidget {
                 Navigator.pop(context);
                 Fluttertoast.showToast(
                     msg:
-                        "Sikeres ${applyToExam ? "jelentkezés" : "leadás"} a vizsgára!");
+                        "Sikeres ${applyToExam ? "jelentkezés a vizsgára" : "leadás"}!");
               } else {
                 Fluttertoast.showToast(msg: examSigningResult ?? "Ismeretlen hiba");
               }
