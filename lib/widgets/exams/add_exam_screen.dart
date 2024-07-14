@@ -66,10 +66,10 @@ class AddExamBody extends StatelessWidget {
                     builder: (context) => ExamDetailsScreen(
                       subjectName: examsList?[index]['SubjectName'],
                       examID: examsList?[index]['ExamID'],
-                      examType: examsList?[index]['examType'],
+                      examType: examsList?[index]['ExamType'],
                       subjectComplianceResult: examsList?[index]
                           ['subjectComplianceResult'],
-                      subjectCode: examsList?[index]['subjectCode'],
+                      subjectCode: examsList?[index]['SubjectCode'],
                       startDate: examsList?[index]['FromDate'],
                       endDate: examsList?[index]['ToDate'],
                       applyToExam: true,
