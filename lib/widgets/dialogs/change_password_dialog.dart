@@ -18,6 +18,7 @@ class ChangePasswordWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0, top: 16.0),
             child: TextField(
+              obscureText: true,
               controller: passwordController,
               decoration: const InputDecoration(
                   labelText: 'Új jelszó', border: OutlineInputBorder()),
@@ -26,6 +27,7 @@ class ChangePasswordWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0, top: 18.0),
             child: TextField(
+              obscureText: true,
               controller: passwordAgainController,
               decoration: const InputDecoration(
                   labelText: 'Új jelszó ismét', border: OutlineInputBorder()),
