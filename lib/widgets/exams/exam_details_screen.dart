@@ -50,14 +50,20 @@ class ExamDetailsScreen extends StatelessWidget {
             },
             label: Text(applyToExam ? 'Jelentkezés' : 'Leadás')),
       ),
-      body: Column(
-        children: [
-          Text(subjectName ?? 'Nincs név'),
-          Text(examType ?? 'Nincs követelmény'),
-          Text(subjectCode ?? 'Nincs tárgykód'),
-          Text(logic.formatDate(startDate ?? '', forceFullDate: true)),
-          Text(logic.formatDate(endDate ?? '', forceFullDate: true))
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(subjectName ?? 'Nincs név',
+                style: const TextStyle(fontSize: 30)),
+            Text(examType ?? 'Nincs követelmény',
+            style: const TextStyle(fontSize: 20)),
+            Text(subjectCode ?? 'Nincs tárgykód'),
+            Text("Kezdés: ${logic.formatDate(startDate ?? '', forceFullDate: true)}"),
+            Text("Vége: ${logic.formatDate(endDate ?? '', forceFullDate: true)}")
+          ],
+        ),
       ),
     );
   }
